@@ -1,0 +1,9 @@
+rules_version = '2';
+service firebase.storage {
+ match /b/{bucket}/o {
+  match /stores/{storeId}/{imageId} {
+   allow read: if firestore.get(/databases/(default)/documents/stores/$(storeId)).data.config.status == 'active';
+   allow write: if request.auth != null && firestore.get(/databases/(default)/documents/stores/$(storeId)).data.config.ownerId == request.auth.uid && (request.resource == null || (request.resource.size < 5 * 1024 * 1024 && request.resource.contentType.matches('image/(jpeg|png|webp)')));
+  }
+ }
+}

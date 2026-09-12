@@ -1,0 +1,24 @@
+rules_version = '2';
+service cloud.firestore {
+ match /databases/{database}/documents {
+  function owner(storeId) { return request.auth != null && get(/databases/$(database)/documents/stores/$(storeId)).data.config.ownerId == request.auth.uid; }
+  function admin() { return request.auth != null && request.auth.token.platformAdmin == true; }
+  match /publicStores/{storeId} {
+   allow read: if resource.data.config.status == 'active';
+   allow write: if false;
+   match /products/{productId} {
+    allow read: if resource.data.visible == true && get(/databases/$(database)/documents/publicStores/$(storeId)).data.config.status == 'active';
+    allow write: if false;
+   }
+  }
+  match /stores/{storeId} {
+   allow read: if owner(storeId) || admin();
+   allow write: if false;
+   match /{collection}/{recordId} {
+    allow read: if owner(storeId) || admin() || (request.auth != null && collection in ['orders', 'charges', 'payments'] && resource.data.uid == request.auth.uid) || (collection == 'customers' && request.auth != null && recordId == request.auth.uid);
+    allow write: if false;
+   }
+  }
+  match /{document=**} { allow read, write: if false; }
+ }
+}
