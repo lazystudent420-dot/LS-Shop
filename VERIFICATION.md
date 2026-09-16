@@ -23,3 +23,9 @@ The included CI workflow retains the full HTTP integration gate so it must pass 
 ## Firebase configuration follow-up
 
 The owner supplied the Web app settings for `ls-shop-59a3d` and target repository `lazystudent420-dot/LS-Shop`. The production configuration, project alias, and deployment instructions have been added. Frontend build, 21 domain tests, rendered UI test, and backend syntax checks were rerun. The prior record above describes the original delivery environment. No deployment authentication is included in the Web app settings.
+
+## GitHub verification confirmed — 16 September 2026
+
+[Workflow run 34692048334](https://github.com/lazystudent420-dot/LS-Shop/actions/runs/34692048334) verified application commit `92b6c247a7b33d672e4f290686ede01314ca0dec` successfully. Every verification step passed, including the full Auth + Functions HTTP emulator integration, Firestore rules, transaction concurrency, UI workflow, domain tests, and both builds. This resolves the earlier local HTTP emulator test limitation.
+
+The deployment job was skipped. Firebase CLI in the working environment reports no authorized accounts. The supplied Web app configuration identifies the project but does not authorize deployment. Complete the authentication steps in DEPLOY-LS-SHOP.md, or configure the documented GitHub-to-Google deployment identity, before publishing. Visual QA, actual email delivery, uploads, and production acceptance remain outstanding.
